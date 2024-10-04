@@ -18,7 +18,7 @@ interface MovieFormProps {
 }
 
 
-const MovieForm: React.FC<MovieFormProps> = ({ onClose , movie}) => {
+const MovieForm: React.FC<MovieFormProps> = ({ onClose, movie }) => {
   const [movieName, setMovieName] = useState('');
   const [releaseDate, setReleaseDate] = useState<Date | null>(null); 
 

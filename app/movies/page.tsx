@@ -8,20 +8,27 @@ import ReviewsModal from '../components/ReviewModal';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import axios from 'axios';
 
+export interface Review {
+  id: string; // Assuming 'id' is required
+  reviewerName: string; // Should always be defined
+  rating: number; // Should always be defined
+  comment: string; // This should be required; if optional, make sure to handle it
+  createdAt?: Date; // Optional property, if needed
+}
+
 interface Movie {
   _id: string;
   movieName: string;
-  releaseDate: string;
+  releaseDate: string; 
   averageRating: number;
 }
 
 export interface Review {
-  id: string; 
   reviewerName: string;
   rating: number;
-  comment?: string;
   createdAt?: Date;
 }
+
 const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isMovieFormVisible, setIsMovieFormVisible] = useState(false);

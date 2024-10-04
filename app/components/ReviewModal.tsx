@@ -1,7 +1,6 @@
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 interface Review {
-  id: number;
   reviewerName: string;
   comment: string;
   rating: number;
@@ -15,19 +14,15 @@ interface Movie {
 }
 
 interface ReviewsModalProps {
-  movieName: string; // Add movieName if needed
-  movie: Movie;
+  movieName: string; 
+  movie: Movie | null;
   reviews: Review[];
-  setReviews: React.Dispatch<React.SetStateAction<Review[]>>;
   onClose: () => void;
 }
 
 
 const ReviewsModal: React.FC<ReviewsModalProps> = ({ movieName, movie, reviews, onClose }) => {
-  console.log("movie ", movie)
-  // const [isReviewFormVisible, setIsReviewFormVisible] = useState(false);
-  // const [selectedReview, setSelectedReview] = useState<Review | null>(null);
-
+  
   const handleEditReview = () => {
     // setSelectedReview(review);
     // setIsReviewFormVisible(true);
@@ -58,12 +53,12 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({ movieName, movie, reviews, 
       <div className="bg-white p-5 rounded-lg shadow-lg max-w-2xl w-full h-[540px] overflow-auto">
         <div className='flex justify-between items-center mb-5'>
           <h2 className="text-2xl text-black font-bold mb-4">{movieName}</h2>
-          <h1 className='text-4xl text-blue-700'>{`${movie.averageRating}/10`}</h1>
+          <h1 className='text-4xl text-blue-700'>{`${movie?.averageRating}/10`}</h1>
         </div>
         {reviews.length > 0 ? (
           <ul className="space-y-4">
-            {reviews.map((review) => (
-              <li key={review.id} className="border p-4 rounded-lg shadow-sm">
+            {reviews.map((review, idx) => (
+              <li key={idx} className="border p-4 rounded-lg shadow-sm">
                 <div className="flex justify-between px-3 py-2">
                   <p className="text-gray-700">{review.comment}</p>
                   <p className="text-sm text-purple-600">Rating: {review.rating}/10</p>
