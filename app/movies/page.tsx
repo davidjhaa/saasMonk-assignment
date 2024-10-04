@@ -15,13 +15,13 @@ interface Movie {
   averageRating: number;
 }
 
-interface Review {
-  _id: string;
+export interface Review {
+  id: string; 
   reviewerName: string;
-  comment: string;
   rating: number;
+  comment?: string;
+  createdAt?: Date;
 }
-
 const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isMovieFormVisible, setIsMovieFormVisible] = useState(false);
@@ -34,7 +34,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/v1/movies');
+        const response = await axios.get(`https://saas-monk-backend-rho.vercel.app/api/v1/movies`);
         setMovies(response.data);
       } catch (error) {
         console.error('Error fetching movies:', error);
@@ -46,7 +46,7 @@ const HomePage = () => {
 
   const handleSearch = async (query: string) => {
     try {
-      const response = await axios.get(`http://localhost:3001/api/v1/movies/search?query=${query}`);
+      const response = await axios.get(`https://saas-monk-backend-rho.vercel.app/api/v1/movies/search?query=${query}`);
       setMovies(response.data); 
     } catch (error) {
       console.error('Error searching movies:', error);
@@ -55,8 +55,7 @@ const HomePage = () => {
 
   const handleMovieClick = async (movie: Movie) => {
     try {
-      const response = await axios.get(`http://localhost:3001/api/v1/review?id=${movie._id}`); 
-      // console.log(response.data)
+      const response = await axios.get(`https://saas-monk-backend-rho.vercel.app/api/v1/review?id=${movie._id}`); 
       setReviews(response.data.reviews);
       setSelectedMovie(movie);
       setIsReviewsModalVisible(true);
@@ -80,7 +79,7 @@ const HomePage = () => {
     if (!confirmDelete) return;
   
     try {
-      await axios.delete(`http://localhost:3001/api/v1/movies/${movie._id}`);
+      await axios.delete(`https://saas-monk-backend-rho.vercel.app/api/v1/movies/${movie._id}`);
       
       setMovies((prevMovies) => prevMovies.filter((m) => m._id !== movie._id));
       
@@ -156,7 +155,6 @@ const HomePage = () => {
           <ReviewsModal
             movieName={selectedMovie.movieName}
             reviews={reviews}
-            setReviews = {setReviews}
             movie={selectedMovie}
             onClose={() => setIsReviewsModalVisible(false)}
           />

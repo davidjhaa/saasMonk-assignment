@@ -45,7 +45,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ movies, onClose, review }) => {
     }
 
     try {
-      const response = await axios.post('http://localhost:3001/api/v1/review', {
+      const response = await axios.post('https://saas-monk-backend-rho.vercel.app/api/v1/review', {
         movieId: selectedMovieId, 
         author, 
         rating, 

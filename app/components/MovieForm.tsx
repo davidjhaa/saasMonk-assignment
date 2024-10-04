@@ -5,33 +5,38 @@ import { useState , useEffect} from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+interface Movie {
+  _id: string;
+  movieName: string;
+  releaseDate: string;
+  averageRating: number;
+}
 
 interface MovieFormProps {
   onClose: () => void;
+  movie?: Movie; 
 }
 
 
 const MovieForm: React.FC<MovieFormProps> = ({ onClose , movie}) => {
   const [movieName, setMovieName] = useState('');
-  const [releaseDate, setReleaseDate] = useState('');
+  const [releaseDate, setReleaseDate] = useState<Date | null>(null); 
 
   useEffect(() => {
     if (movie) {
-      setMovieName(movie.movieName); // Set movie name if movie exists
-      setReleaseDate(movie.releaseDate); // Set release date if movie exists
+      setMovieName(movie.movieName); 
+      setReleaseDate(movie.releaseDate ? new Date(movie.releaseDate) : null);
     } else {
-      setMovieName(''); // Clear movie name if no movie is present
-      setReleaseDate(''); // Clear release date if no movie is present
+      setMovieName(''); 
+      setReleaseDate(null); 
     }
   }, [movie]);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === 'movieName') {
       setMovieName(value);
-    } else if (name === 'releaseDate') {
-      setReleaseDate(value);
-    }
+    } 
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -44,11 +49,11 @@ const MovieForm: React.FC<MovieFormProps> = ({ onClose , movie}) => {
 
     try {
       const response = movie
-        ? await axios.put(`http://localhost:3001/api/v1/movies/${movie._id}`, {
+        ? await axios.put(`https://saas-monk-backend-rho.vercel.app/api/v1/movies/${movie._id}`, {
             movieName,
             releaseDate,
           })
-        : await axios.post('http://localhost:3001/api/v1/movies', {
+        : await axios.post('https://saas-monk-backend-rho.vercel.app/api/v1/movies', {
             movieName,
             releaseDate,
           });
@@ -81,7 +86,7 @@ const MovieForm: React.FC<MovieFormProps> = ({ onClose , movie}) => {
           <DatePicker
             selected={releaseDate}
             className="border p-2 mb-4 w-full cursor-pointer"
-            onChange={(date) => setReleaseDate(date)}
+            onChange={(date: Date | null) => setReleaseDate(date)}
             placeholderText='Select Release Date'
           />
           <button

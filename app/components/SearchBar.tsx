@@ -1,15 +1,22 @@
 import { IoSearchOutline } from "react-icons/io5";
 
-const SearchBar = ({ value, onChange, onSearch }: { value: string; onChange: (value: string) => void }) => {
-
+const SearchBar = ({
+    value,
+    onChange,
+    onSearch,
+}: {
+    value: string;
+    onChange: (value: string) => void;
+    onSearch: (query: string) => Promise<void>; 
+}) => {
     const handleSearch = async () => {
         if (!value) {
             return;
         }
-        onSearch(value); // Call the search function passed from the parent
+        await onSearch(value); 
     }
 
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             handleSearch();
         }
