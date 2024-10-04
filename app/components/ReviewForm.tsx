@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
@@ -8,17 +8,33 @@ interface Movie {
   movieName: string;
 }
 
+interface Review {
+  reviewerName: string;
+  comment: string;
+  rating: number;
+}
+
 interface ReviewFormProps {
   movies: Movie[];
   onClose: () => void;
+  review?: Review; 
+  fetchReviews: () => void;
 }
 
-const ReviewForm: React.FC<ReviewFormProps> = ({ movies, onClose }) => {
+const ReviewForm: React.FC<ReviewFormProps> = ({ movies, onClose, review }) => {
   const [selectedMovieId, setSelectedMovieId] = useState<string | null>(null);
-  const [selectedMovieName, setSelectedMovieName] = useState<string | null>(null); // Add state for movie name
   const [author, setAuthor] = useState('');
   const [rating, setRating] = useState<number | null>(null);
   const [comment, setComment] = useState('');
+
+  useEffect(() => {
+    if (review) {
+      setSelectedMovieId(null);
+      setAuthor(review.reviewerName);
+      setRating(review.rating);
+      setComment(review.comment);
+    }
+  }, [review]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +51,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ movies, onClose }) => {
         rating, 
         comment, 
       });
-  
+
       if (response.status === 201 || response.status === 200) {
         toast.success('Review added successfully!');
         setTimeout(() => {
@@ -54,6 +70,54 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ movies, onClose }) => {
     setRating(null);
     setComment('');
   };
+
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+
+  //   if (!selectedMovieId && !review) {
+  //     toast.error('Movie must be selected for a new review');
+  //     return;
+  //   }
+  //   if (!rating || !comment) {
+  //     toast.error('Rating and comment are required');
+  //     return;
+  //   }
+
+  //   try {
+  //     if (review) {
+  //       const response = await axios.put(`http://localhost:3001/api/v1/review/${review.id}`, {
+  //         author,
+  //         rating,
+  //         comment,
+  //       });
+
+  //       if (response.status === 200) {
+  //         toast.success('Review updated successfully!');
+  //       } else {
+  //         toast.error('Failed to update review, please try again');
+  //       }
+  //     } else {
+  //       const response = await axios.post('http://localhost:3001/api/v1/review', {
+  //         movieId: selectedMovieId,
+  //         author,
+  //         rating,
+  //         comment,
+  //       });
+
+  //       if (response.status === 201 || response.status === 200) {
+  //         toast.success('Review added successfully!');
+  //       } else {
+  //         toast.error('Failed to add review, please try again');
+  //       }
+  //     }
+
+  //     fetchReviews();  // Re-fetch the reviews after submitting
+  //     onClose();  // Close the form
+  //   } catch (error) {
+  //     console.error('Error submitting review:', error);
+  //     toast.error('Error submitting review, please try again');
+  //   }
+  // };
 
   return (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center text-black">

@@ -35,7 +35,6 @@ const HomePage = () => {
     const fetchMovies = async () => {
       try {
         const response = await axios.get('http://localhost:3001/api/v1/movies');
-        console.log(response.data); 
         setMovies(response.data);
       } catch (error) {
         console.error('Error fetching movies:', error);
@@ -85,7 +84,7 @@ const HomePage = () => {
       
       setMovies((prevMovies) => prevMovies.filter((m) => m._id !== movie._id));
       
-      alert(`Movie "${movie.movieName}" deleted successfully.`);
+      alert(`"${movie.movieName}" deleted successfully.`);
     } 
     catch (error) {
       console.error('Error deleting movie:', error);
@@ -157,7 +156,8 @@ const HomePage = () => {
           <ReviewsModal
             movieName={selectedMovie.movieName}
             reviews={reviews}
-            // avgRating = {selectedMovie.rating}
+            setReviews = {setReviews}
+            movie={selectedMovie}
             onClose={() => setIsReviewsModalVisible(false)}
           />
         )}
