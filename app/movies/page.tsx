@@ -9,7 +9,6 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 import axios from 'axios';
 
 export interface Review {
-  id: string; // Assuming 'id' is required
   reviewerName: string; // Should always be defined
   rating: number; // Should always be defined
   comment: string; // This should be required; if optional, make sure to handle it
@@ -28,6 +27,11 @@ export interface Review {
   rating: number;
   createdAt?: Date;
 }
+
+export interface ReviewFormProps{
+  movies : Movie[] | null;
+}
+
 
 const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -173,7 +177,7 @@ const HomePage = () => {
               setIsMovieFormVisible(false);
               setSelectedMovie(null);
             }}
-            movie={selectedMovie}
+            movie={selectedMovie ? selectedMovie : undefined}
           />
         )}
 
