@@ -15,7 +15,7 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({ movieName, reviews, onClose
   return (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-5 rounded-lg shadow-lg max-w-2xl w-full">
-        <h2 className="text-2xl font-bold mb-4">{movieName}</h2>
+        <h2 className="text-2xl text-black font-bold mb-4">{movieName}</h2>
         {reviews.length > 0 ? (
           <ul className="space-y-4">
             {reviews.map((review) => (
@@ -27,7 +27,7 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({ movieName, reviews, onClose
             ))}
           </ul>
         ) : (
-          <p>No reviews available for this movie.</p>
+          <p className="text-black text-2xl">No reviews available for  "{movieName}".</p>
         )}
         <button className="mt-4 text-red-500" onClick={onClose}>
           Close
